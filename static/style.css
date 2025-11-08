@@ -1,0 +1,469 @@
+/* 主体样式 */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* 定义主题变量 */
+:root {
+    --bg-gradient-start: #f5f7fa;
+    --bg-gradient-end: #c3cfe2;
+    --body-bg: #f5f7fa;
+    --text-color: #2c3e50;
+    --header-text: #2c3e50;
+    --header-subtext: #7f8c8d;
+    --card-bg: #ffffff;
+    --card-hover-border: #3498db;
+    --card-header-bg: linear-gradient(90deg, #3498db, #2980b9);
+    --card-body-bg: rgba(255, 255, 255, 0.7);
+    --card-text: #2c3e50;
+    --search-border: #3498db;
+    --search-shadow: rgba(52, 152, 219, 0.2);
+    --search-focus-border: #e74c3c;
+    --search-focus-shadow: rgba(231, 76, 60, 0.3);
+    --copy-btn-bg: rgba(255, 255, 255, 0.2);
+    --copy-btn-hover: rgba(255, 255, 255, 0.3);
+    --copy-btn-copied: #2ecc71;
+    --copy-btn-border: rgba(255, 255, 255, 0.3);
+    --blockquote-bg: #f8f9fa;
+    --blockquote-border: #3498db;
+    --blockquote-text: #7f8c8d;
+    --code-bg: #f1f2f6;
+    --pre-bg: #f8f9fa;
+    --pre-border: #e9ecef;
+    --no-results-bg: #ffffff;
+    --no-results-text: #7f8c8d;
+    --card-shadow: 0 8px 30px rgba(0,0,0,0.12);
+    --card-hover-shadow: 0 15px 40px rgba(0,0,0,0.18);
+    --card-border: #e9ecef;
+}
+
+/* 黑暗模式样式 */
+[data-theme="dark"] {
+    --bg-gradient-start: #1a1a2e;
+    --bg-gradient-end: #16213e;
+    --body-bg: #1a1a2e;
+    --text-color: #e6e6e6;
+    --header-text: #e6e6e6;
+    --header-subtext: #bdc3c7;
+    --card-bg: #2c2c3a;
+    --card-hover-border: #5dade2;
+    --card-header-bg: linear-gradient(90deg, #1a5276, #2471a3);
+    --card-body-bg: rgba(44, 44, 58, 0.7);
+    --card-text: #e6e6e6;
+    --search-border: #5dade2;
+    --search-shadow: rgba(93, 173, 226, 0.2);
+    --search-focus-border: #e74c3c;
+    --search-focus-shadow: rgba(231, 76, 60, 0.3);
+    --copy-btn-bg: rgba(80, 80, 100, 0.2);
+    --copy-btn-hover: rgba(80, 80, 100, 0.3);
+    --copy-btn-copied: #27ae60;
+    --copy-btn-border: rgba(100, 100, 120, 0.3);
+    --blockquote-bg: #3a3a4a;
+    --blockquote-border: #5dade2;
+    --blockquote-text: #bdc3c7;
+    --code-bg: #3a3a4a;
+    --pre-bg: #3a3a4a;
+    --pre-border: #4a4a5a;
+    --no-results-bg: #2c2c3a;
+    --no-results-text: #bdc3c7;
+    --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+    --card-hover-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
+    --card-border: #4a4a5a;
+}
+
+body {
+    font-family: 'Segoe UI', 'Microsoft YaHei', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+    background-color: var(--body-bg);
+    min-height: 100vh;
+    padding: 20px;
+    line-height: 1.6;
+    color: var(--text-color);
+    transition: background 0.3s, color 0.3s;
+}
+
+/* 头部样式 */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    position: relative;
+}
+
+.header h1 {
+    color: var(--header-text);
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.header p {
+    color: var(--header-subtext);
+    font-size: 1.1em;
+}
+
+/* 左上角主题切换按钮 */
+.theme-toggle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 80px;
+    z-index: 99; /* 稍微低于GitHub链接 */
+    text-decoration: none;
+    display: block;
+    overflow: visible;
+}
+
+.theme-toggle svg {
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.theme-toggle:hover svg {
+    transform: scale(1.1);
+}
+
+/* 右上角GitHub链接 */
+.github-link {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 80px;
+    height: 80px;
+    z-index: 100;
+    text-decoration: none;
+    display: block;
+    overflow: visible;
+}
+
+.github-link svg {
+    transition: all 0.3s ease;
+}
+
+.github-link:hover .octo-arm {
+    animation: octocat-wave 560ms ease-in-out;
+}
+
+/* Octocat波浪动画 */
+@keyframes octocat-wave {
+    0%, 100% { transform: rotate(0); }
+    20%, 60% { transform: rotate(-25deg); }
+    40%, 80% { transform: rotate(10deg); }
+}
+
+/* 头部样式 - 移除角标预留空间 */
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 100px 20px 20px 20px; /* 为角标留出空间，但减少左右padding */
+    position: relative;
+    min-height: 80px; /* 确保有足够的空间容纳角标 */
+}
+
+.header h1 {
+    color: var(--header-text);
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+}
+
+.header p {
+    color: var(--header-subtext);
+    font-size: 1.1em;
+}
+
+/* 确保body有适当的边距以容纳角标 */
+body {
+    padding-top: 0;
+    margin-top: 0;
+}
+
+/* 搜索容器样式 */
+.search-container {
+    max-width: 800px;
+    margin: 0 auto 30px;
+    position: relative;
+}
+
+#searchInput {
+    width: 100%;
+    padding: 15px 25px;
+    font-size: 18px;
+    border: 2px solid var(--search-border);
+    border-radius: 50px;
+    outline: none;
+    transition: all 0.3s ease;
+    background: white;
+    color: var(--text-color);
+    box-shadow: 0 4px 15px var(--search-shadow);
+}
+
+/* 暗黑模式下搜索输入框样式 */
+[data-theme="dark"] #searchInput {
+    background: #2d3748; /* 深灰色背景 */
+    color: #e2e8f0; /* 浅色文字 */
+    border-color: #4a5568; /* 深灰色边框 */
+}
+
+#searchInput:focus {
+    border-color: var(--search-focus-border);
+    box-shadow: 0 4px 20px var(--search-focus-shadow);
+    transform: translateY(-2px);
+}
+
+/* 卡片容器样式 */
+.cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+    gap: 25px;
+    max-width: 1600px;
+    margin: 0 auto;
+}
+
+/* 单个卡片样式 */
+.card {
+    background: linear-gradient(145deg, var(--card-bg), #f8f9fa);
+    border-radius: 15px;
+    box-shadow: var(--card-shadow);
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    flex-direction: column;
+    height: 350px;
+    position: relative;
+    border: 1px solid var(--card-border);
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: var(--card-hover-shadow);
+    border-color: var(--card-hover-border);
+}
+
+/* 卡片头部样式 */
+.card-header {
+    padding: 20px;
+    background: var(--card-header-bg);
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+
+.card-title {
+    font-weight: bold;
+    color: white;
+    font-size: 1.2em;
+    flex-grow: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 15px;
+}
+
+/* 复制按钮样式 */
+.copy-btn {
+    background: var(--copy-btn-bg);
+    color: white;
+    border: 1px solid var(--copy-btn-border);
+    border-radius: 8px;
+    padding: 8px 15px;
+    cursor: pointer;
+    font-size: 0.9em;
+    transition: all 0.3s ease;
+    min-width: 60px;
+}
+
+.copy-btn:hover {
+    background: var(--copy-btn-hover);
+    transform: scale(1.05);
+}
+
+.copy-btn.copied {
+    background: var(--copy-btn-copied);
+    border-color: var(--copy-btn-copied);
+}
+
+/* 卡片内容区样式 */
+.card-body {
+    padding: 20px;
+    flex-grow: 1;
+    overflow-y: auto;
+    color: var(--card-text);
+    font-size: 0.95em;
+    line-height: 1.7;
+    background: var(--card-body-bg);
+}
+
+/* Markdown内容样式 */
+.markdown-content {
+    line-height: 1.6;
+    font-size: 0.95em;
+    color: var(--card-text);
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+    margin: 8px 0 6px 0;
+    color: var(--card-text);
+    font-weight: bold;
+    display: inline; /* 防止标题造成过大间距 */
+}
+
+.markdown-content h1 {
+    font-size: 1.1em;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.markdown-content h2 {
+    font-size: 1.05em;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.markdown-content h3 {
+    font-size: 1.0em;
+}
+
+.markdown-content p {
+    margin: 6px 0;
+    display: block;
+}
+
+.markdown-content ul {
+    margin: 6px 0;
+    padding-left: 15px;
+}
+
+.markdown-content li {
+    margin: 3px 0;
+    display: list-item;
+}
+
+.markdown-content code {
+    background: var(--code-bg);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.markdown-content pre {
+    background: var(--pre-bg);
+    color: var(--card-text);
+    padding: 8px;
+    border-radius: 4px;
+    overflow-x: auto;
+    margin: 8px 0;
+    font-size: 0.9em;
+    border: 1px solid var(--pre-border);
+}
+
+.markdown-content pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+    display: block;
+}
+
+.markdown-content blockquote {
+    border-left: 2px solid var(--blockquote-border);
+    padding-left: 8px;
+    margin: 8px 0;
+    color: var(--blockquote-text);
+    font-style: italic;
+    background: var(--blockquote-bg);
+    padding: 4px 8px;
+    border-radius: 0 4px 4px 0;
+}
+
+.markdown-content a {
+    color: var(--search-border);
+    text-decoration: none;
+}
+
+.markdown-content a:hover {
+    text-decoration: underline;
+}
+
+/* 没有结果提示样式 */
+.no-results {
+    text-align: center;
+    grid-column: 1 / -1;
+    padding: 60px 20px;
+    color: #7f8c8d;
+    font-size: 1.3em;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+    margin: 20px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    .cards-container {
+        grid-template-columns: 1fr;
+    }
+
+    body {
+        padding: 10px;
+    }
+
+    .header h1 {
+        font-size: 2em;
+    }
+
+    #searchInput {
+        padding: 12px 20px;
+        font-size: 16px;
+    }
+
+    .card {
+        height: 320px;
+    }
+
+    .card-title {
+        font-size: 1.1em;
+    }
+}
+
+/* 加载动画 */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.card {
+    animation: fadeIn 0.6s ease-out;
+}
+
+/* 滚动条样式 */
+.card-body::-webkit-scrollbar {
+    width: 8px;
+}
+
+.card-body::-webkit-scrollbar-track {
+    background: var(--blockquote-bg);
+    border-radius: 4px;
+}
+
+.card-body::-webkit-scrollbar-thumb {
+    background: var(--search-border);
+    border-radius: 4px;
+}
+
+.card-body::-webkit-scrollbar-thumb:hover {
+    background: var(--search-focus-border);
+}
