@@ -30,12 +30,12 @@ python3 generate_prompt_site.py
 该脚本会：
 - 扫描当前目录下所有`.md`文件（排除README.md）
 - 将文件名转换为标题（下划线和连字符会转换为空格）
-- 生成`data.js`数据文件
+- 生成`static/data.js`数据文件
 - 显示处理的文件数量
 
 ### 3. 查看网站
 
-在浏览器中打开`index.html`文件即可查看提示词管理器界面。
+在浏览器中打开`static/index.html`文件即可查看提示词管理器界面。
 
 ## 网站功能
 
@@ -50,9 +50,9 @@ python3 generate_prompt_site.py
 ```
 llm_prompt/
 ├── generate_prompt_site.py  # 生成数据文件的脚本
-├── index.html              # 主页面
-├── data.js                 # 生成的数据文件
 ├── static/
+│   ├── index.html         # 主页面
+│   ├── data.js            # 生成的数据文件
 │   ├── style.css          # 样式文件
 │   └── script.js          # 功能脚本
 ├── *.md                   # 你的提示词文件

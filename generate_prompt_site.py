@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 生成数据JS文件，用于静态网站展示当前目录下的所有Markdown提示词文件
-网站结构包括：index.html, static/style.css, static/script.js, data.js
+网站结构包括：static/index.html, static/data.js, static/style.css, static/script.js
 现在使用文件名作为标题，排除README.md，并修复复制和预览问题
 """
 
@@ -41,9 +41,9 @@ def generate_data_js():
         print("当前目录下没有找到Markdown文件（已排除README.md）")
         # 生成空数据
         js_content = "const promptData = [];"
-        with open('data.js', 'w', encoding='utf-8') as f:
+        with open('static/data.js', 'w', encoding='utf-8') as f:
             f.write(js_content)
-        print("已生成空数据文件: data.js")
+        print("已生成空数据文件: static/data.js")
         return
     
     # 读取所有Markdown文件内容
@@ -81,17 +81,17 @@ def generate_data_js():
     js_content = f"const promptData = {json.dumps(cards_data, ensure_ascii=False, indent=2)};"
     
     # 写入数据JS文件
-    with open('data.js', 'w', encoding='utf-8') as f:
+    with open('static/data.js', 'w', encoding='utf-8') as f:
         f.write(js_content)
     
     print(f"成功生成数据文件！共处理了 {len(cards_data)} 个Markdown文件（已排除README.md）。")
-    print("数据已保存为: data.js")
+    print("数据已保存为: static/data.js")
     print("完整的网站结构包括：")
-    print("- index.html (主页面)")
-    print("- data.js (数据文件)")
+    print("- static/index.html (主页面)")
+    print("- static/data.js (数据文件)")
     print("- static/style.css (样式文件)")
     print("- static/script.js (功能脚本)")
-    print("\n请在浏览器中打开 index.html 查看结果。")
+    print("\n请在浏览器中打开 static/index.html 查看结果。")
 
 
 if __name__ == "__main__":
