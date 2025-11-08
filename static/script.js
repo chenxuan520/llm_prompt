@@ -95,20 +95,26 @@ function copyToClipboard(button) {
     // 将转义的换行符转换为实际换行符
     content = content.replace(/\\n/g, '\n').replace(/\\r/g, '\r');
 
-    navigator.clipboard.writeText(content).then(() => {
-        const originalText = button.textContent;
-        button.textContent = '✓ 已复制!';
-        button.classList.add('copied');
+    // 检查 navigator.clipboard 是否可用
+    if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') {
+        navigator.clipboard.writeText(content).then(() => {
+            const originalText = button.textContent;
+            button.textContent = '✓ 已复制!';
+            button.classList.add('copied');
 
-        setTimeout(() => {
-            button.textContent = originalText;
-            button.classList.remove('copied');
-        }, 2000);
-    }).catch(err => {
-        console.error('复制失败:', err);
-        // 如果 navigator.clipboard 不支持，则使用旧方法
+            setTimeout(() => {
+                button.textContent = originalText;
+                button.classList.remove('copied');
+            }, 2000);
+        }).catch(err => {
+            console.error('复制失败:', err);
+            // 如果 navigator.clipboard 不支持，则使用旧方法
+            fallbackCopyTextToClipboard(content, button);
+        });
+    } else {
+        // 如果 navigator.clipboard 不可用，直接使用旧方法
         fallbackCopyTextToClipboard(content, button);
-    });
+    }
 }
 
 // 旧版复制功能（兼容性备用）
