@@ -239,8 +239,10 @@ function initRefreshCache() {
                     existingScript.remove();
                 }
 
-                // 移除现有的promptData变量
-                delete window.promptData;
+                // 清除现有的promptData变量（对于var声明的变量，直接设为undefined即可）
+                if (window.promptData) {
+                    window.promptData = undefined;
+                }
 
                 // 创建新的script标签，添加时间戳避免缓存
                 const script = document.createElement('script');

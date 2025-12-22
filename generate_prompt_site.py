@@ -78,7 +78,7 @@ def generate_data_js():
         })
     
     # 生成JavaScript数据文件
-    js_content = f"const promptData = {json.dumps(cards_data, ensure_ascii=False, indent=2)};"
+    js_content = f"var promptData = {json.dumps(cards_data, ensure_ascii=False, indent=2)};"
     
     # 写入数据JS文件
     with open('static/data.js', 'w', encoding='utf-8') as f:
