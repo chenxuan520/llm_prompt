@@ -215,6 +215,110 @@ function debounce(func, wait) {
     };
 }
 
+// 强制刷新缓存功能
+function initRefreshCache() {
+    const refreshBtn = document.getElementById('refreshCacheBtn');
+
+    if (refreshBtn) {
+        refreshBtn.addEventListener('click', async function(e) {
+            e.preventDefault();
+
+            // 显示加载状态
+            const originalContent = refreshBtn.innerHTML;
+            refreshBtn.innerHTML = `
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67V7z" fill="currentColor"/>
+                </svg>
+            `;
+            refreshBtn.disabled = true;
+
+            try {
+                // 移除现有的data.js脚本
+                const existingScript = document.querySelector('script[src*="data.js"]');
+                if (existingScript) {
+                    existingScript.remove();
+                }
+
+                // 移除现有的promptData变量
+                delete window.promptData;
+
+                // 创建新的script标签，添加时间戳避免缓存
+                const script = document.createElement('script');
+                const timestamp = new Date().getTime();
+                script.src = `data.js?t=${timestamp}`;
+
+                // 等待脚本加载完成
+                await new Promise((resolve, reject) => {
+                    script.onload = resolve;
+                    script.onerror = reject;
+                    document.head.appendChild(script);
+                });
+
+                // 重新生成卡片
+                if (typeof promptData !== 'undefined' && promptData.length > 0) {
+                    const container = document.getElementById('cardsContainer');
+                    container.innerHTML = ''; // 清空现有卡片
+
+                    promptData.forEach(item => {
+                        const card = document.createElement('div');
+                        card.className = 'card';
+                        card.setAttribute('data-title', item.title);
+                        card.setAttribute('data-filename', item.filename);
+                        card.setAttribute('data-content', item.content);
+
+                        card.innerHTML = `
+                            <div class="card-header">
+                                <div class="card-title">${item.title}</div>
+                                <button class="copy-btn" onclick="copyToClipboard(this)">复制</button>
+                            </div>
+                            <div class="card-body">
+                                <div class="markdown-content">${simpleMarkdownToHtml(item.preview)}</div>
+                            </div>
+                        `;
+
+                        container.appendChild(card);
+                    });
+
+                    // 重新初始化搜索功能
+                    setTimeout(initSearch, 100);
+
+                    // 显示成功状态
+                    const successContent = `
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" fill="currentColor"/>
+                        </svg>
+                    `;
+                    refreshBtn.innerHTML = successContent;
+
+                    setTimeout(() => {
+                        refreshBtn.innerHTML = originalContent;
+                        refreshBtn.disabled = false;
+                    }, 1000);
+                } else {
+                    throw new Error('数据加载失败或为空');
+                }
+            } catch (error) {
+                console.error('刷新缓存失败:', error);
+
+                // 显示错误状态
+                const errorContent = `
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z" fill="currentColor"/>
+                    </svg>
+                `;
+                refreshBtn.innerHTML = errorContent;
+
+                setTimeout(() => {
+                    refreshBtn.innerHTML = originalContent;
+                    refreshBtn.disabled = false;
+                }, 2000);
+
+                alert('刷新缓存失败，请确保已运行 python3 generate_prompt_site.py 生成最新的data.js文件');
+            }
+        });
+    }
+}
+
 // 主题切换功能
 function initThemeToggle() {
     const themeToggle = document.getElementById('themeToggle');
@@ -288,6 +392,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // 初始化主题切换功能
     initThemeToggle();
+
+    // 初始化刷新缓存功能
+    initRefreshCache();
 
     // 页面加载时聚焦到搜索框
     const searchInput = document.getElementById('searchInput');

@@ -147,6 +147,41 @@ body {
     animation: octocat-wave 560ms ease-in-out;
 }
 
+/* 右下角刷新缓存按钮 */
+.refresh-cache-btn {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border: none;
+    border-radius: 50%;
+    background: var(--card-header-bg);
+    color: white;
+    cursor: pointer;
+    z-index: 100;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.refresh-cache-btn:hover {
+    transform: rotate(90deg) scale(1.1);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+}
+
+.refresh-cache-btn:active {
+    transform: rotate(180deg) scale(0.95);
+}
+
+.refresh-cache-btn svg {
+    width: 24px;
+    height: 24px;
+    transition: all 0.3s ease;
+}
+
 /* Octocat波浪动画 */
 @keyframes octocat-wave {
     0%, 100% { transform: rotate(0); }
