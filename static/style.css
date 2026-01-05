@@ -37,6 +37,12 @@
     --card-shadow: 0 8px 30px rgba(0,0,0,0.12);
     --card-hover-shadow: 0 15px 40px rgba(0,0,0,0.18);
     --card-border: #e9ecef;
+    --tag-bg: #ffffff;
+    --tag-color: #3498db;
+    --tag-border-color: #3498db;
+    --tag-hover-bg: #f0f8ff;
+    --tag-hover-border-color: #2980b9;
+    --accent-color: #3498db;
 }
 
 /* 黑暗模式样式 */
@@ -71,6 +77,12 @@
     --card-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
     --card-hover-shadow: 0 15px 40px rgba(0, 0, 0, 0.6);
     --card-border: #4a4a5a;
+    --tag-bg: #2c2c3a;
+    --tag-color: #5dade2;
+    --tag-border-color: #5dade2;
+    --tag-hover-bg: #3a3a4a;
+    --tag-hover-border-color: #8ecae6;
+    --accent-color: #5dade2;
 }
 
 body {
@@ -78,7 +90,8 @@ body {
     background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
     background-color: var(--body-bg);
     min-height: 100vh;
-    padding: 20px;
+    padding-top: 0; /* 确保body有适当的边距以容纳角标 */
+    margin-top: 0; /* 确保body有适当的边距以容纳角标 */
     line-height: 1.6;
     color: var(--text-color);
     transition: background 0.3s, color 0.3s;
@@ -87,9 +100,10 @@ body {
 /* 头部样式 */
 .header {
     text-align: center;
-    margin-bottom: 30px;
-    padding: 20px;
+    margin-bottom: 15px;
+    padding: 100px 20px 20px 20px; /* 为角标留出空间 */
     position: relative;
+    min-height: 80px; /* 确保有足够的空间容纳角标 */
 }
 
 .header h1 {
@@ -102,6 +116,7 @@ body {
 .header p {
     color: var(--header-subtext);
     font-size: 1.1em;
+    margin-bottom: 5px; /* 减小与搜索框的距离 */
 }
 
 /* 左上角主题切换按钮 */
@@ -189,37 +204,10 @@ body {
     40%, 80% { transform: rotate(10deg); }
 }
 
-/* 头部样式 - 移除角标预留空间 */
-.header {
-    text-align: center;
-    margin-bottom: 30px;
-    padding: 100px 20px 20px 20px; /* 为角标留出空间，但减少左右padding */
-    position: relative;
-    min-height: 80px; /* 确保有足够的空间容纳角标 */
-}
-
-.header h1 {
-    color: var(--header-text);
-    font-size: 2.5em;
-    margin-bottom: 10px;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
-}
-
-.header p {
-    color: var(--header-subtext);
-    font-size: 1.1em;
-}
-
-/* 确保body有适当的边距以容纳角标 */
-body {
-    padding-top: 0;
-    margin-top: 0;
-}
-
 /* 搜索容器样式 */
 .search-container {
     max-width: 800px;
-    margin: 0 auto 30px;
+    margin: 0 auto 30px; /* 调整与上方元素的距离 */
     position: relative;
 }
 
@@ -247,6 +235,49 @@ body {
     border-color: var(--search-focus-border);
     box-shadow: 0 4px 20px var(--search-focus-shadow);
     transform: translateY(-2px);
+}
+
+/* 标签容器 */
+.tags-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* 标签按钮 */
+.tag-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    background-color: var(--tag-bg);
+    color: var(--tag-color);
+    border: 1px solid var(--tag-border-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.tag-btn:hover {
+    background-color: var(--tag-hover-bg);
+    border-color: var(--tag-hover-border-color);
+    transform: translateY(-2px);
+}
+
+/* 激活的标签按钮 */
+.tag-btn.active {
+    background-color: var(--accent-color);
+    color: #fff;
+    border-color: var(--accent-color);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] .tag-btn.active {
+     color: #000;
 }
 
 /* 卡片容器样式 */

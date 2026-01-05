@@ -39,6 +39,10 @@
         <input type="text" id="searchInput" placeholder="搜索提示词...">
     </div>
 
+    <div id="tags-container" class="tags-container">
+        <!-- 标签按钮将通过JS动态生成 -->
+    </div>
+
     <div class="cards-container" id="cardsContainer">
         <!-- 卡片将通过 data.js 动态生成 -->
     </div>
@@ -47,36 +51,10 @@
     <script src="data.js"></script>
     <script src="script.js"></script>
     
-    <!-- 动态生成卡片的脚本 -->
     <script>
-        // 页面加载完成后生成卡片
+        // 页面加载完成后，调用主渲染函数
         document.addEventListener('DOMContentLoaded', function() {
-            if (typeof promptData !== 'undefined' && promptData.length > 0) {
-                const container = document.getElementById('cardsContainer');
-                
-                promptData.forEach(item => {
-                    const card = document.createElement('div');
-                    card.className = 'card';
-                    card.setAttribute('data-title', item.title);
-                    card.setAttribute('data-filename', item.filename);
-                    card.setAttribute('data-content', item.content);
-                    
-                    card.innerHTML = `
-                        <div class="card-header">
-                            <div class="card-title">${item.title}</div>
-                            <button class="copy-btn" onclick="copyToClipboard(this)">复制</button>
-                        </div>
-                        <div class="card-body">
-                            <div class="markdown-content">${simpleMarkdownToHtml(item.preview)}</div>
-                        </div>
-                    `;
-                    
-                    container.appendChild(card);
-                });
-                
-                // 初始化搜索功能
-                setTimeout(initSearch, 100); // 延迟执行确保DOM已完全加载
-            }
+            renderPage();
         });
     </script>
 </body>

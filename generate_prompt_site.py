@@ -32,11 +32,45 @@ def escape_js_string(text):
     return text
 
 
+def parse_front_matter(content):
+    """解析Markdown文件头部的Front Matter"""
+    try:
+        if content.startswith('---'):
+            parts = content.split('---', 2)
+            if len(parts) > 2:
+                front_matter_text = parts[1]
+                main_content = parts[2].lstrip()
+
+                tags = []
+                priority = 0
+
+                for line in front_matter_text.strip().split('\n'):
+                    if ':' in line:
+                        key, value = line.split(':', 1)
+                        key = key.strip()
+                        value = value.strip()
+                        if key == 'tag':
+                            tags = [tag.strip() for tag in value.split(',') if tag.strip()]
+                        elif key == 'priority':
+                            try:
+                                priority = int(value)
+                            except ValueError:
+                                priority = 0
+
+                return {'tags': tags, 'priority': priority}, main_content
+    except Exception:
+        # 解析失败则返回默认值
+        pass
+
+    # 如果没有Front Matter或解析失败，返回默认值和原始内容
+    return {'tags': [], 'priority': 0}, content
+
+
 def generate_data_js():
     # 获取当前目录下的所有.md文件，排除README.md
     current_dir = Path('.')
     markdown_files = [f for f in current_dir.glob('*.md') if f.name.lower() != 'readme.md']
-    
+
     if not markdown_files:
         print("当前目录下没有找到Markdown文件（已排除README.md）")
         # 生成空数据
@@ -45,46 +79,42 @@ def generate_data_js():
             f.write(js_content)
         print("已生成空数据文件: static/data.js")
         return
-    
+
     # 读取所有Markdown文件内容
     cards_data = []
     for md_file in markdown_files:
         try:
             with open(md_file, 'r', encoding='utf-8') as f:
-                content = f.read()
+                raw_content = f.read()
         except UnicodeDecodeError:
             # 如果UTF-8解码失败，尝试其他编码
             with open(md_file, 'r', encoding='gbk', errors='ignore') as f:
-                content = f.read()
-        
+                raw_content = f.read()
+
+        metadata, content = parse_front_matter(raw_content)
+
         # 使用文件名作为标题
         title = filename_to_title(md_file.name)
-        
-        # 只取前500个字符作为预览（保留原始换行）
-        preview = content[:500].strip()
-        if len(content) > 500:
-            preview += '\n\n...'  # 直接用...代替"内容已截断"
-        
-        # 转义JavaScript字符串
-        title_escaped = escape_js_string(title)
-        preview_escaped = escape_js_string(preview)
-        content_escaped = escape_js_string(content)
-        
+
         cards_data.append({
-            'filename': escape_js_string(md_file.name),
-            'title': title_escaped,
-            'preview': preview_escaped,
-            'content': content_escaped  # 这是用于复制的完整内容
+            'title': title,
+            'content': content,
+            'tags': metadata.get('tags', []),
+            'priority': metadata.get('priority', 0),
+            'filename': md_file.name,
         })
-    
+
+    # 根据priority降序排序
+    cards_data.sort(key=lambda x: x['priority'], reverse=True)
+
     # 生成JavaScript数据文件
     js_content = f"var promptData = {json.dumps(cards_data, ensure_ascii=False, indent=2)};"
-    
+
     # 写入数据JS文件
     with open('static/data.js', 'w', encoding='utf-8') as f:
         f.write(js_content)
-    
-    print(f"成功生成数据文件！共处理了 {len(cards_data)} 个Markdown文件（已排除README.md）。")
+
+    print(f"成功生成数据文件！共处理了 {len(cards_data)} 个Markdown文件。")
     print("数据已保存为: static/data.js")
     print("完整的网站结构包括：")
     print("- static/index.html (主页面)")
@@ -92,7 +122,6 @@ def generate_data_js():
     print("- static/style.css (样式文件)")
     print("- static/script.js (功能脚本)")
     print("\n请在浏览器中打开 static/index.html 查看结果。")
-
 
 if __name__ == "__main__":
     generate_data_js()

@@ -1,3 +1,7 @@
+---
+tag: prompt,chat
+priority: 7
+---
 # 角色：提示架构师
 
 ## 目标
